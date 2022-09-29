@@ -12,5 +12,4 @@ ___
 ```
 docker-compose up -d
 python manage.py migrate
-python manage.py loaddata fixtures/ad.json fixtures/comments.json fixtures/users.json
 ```
