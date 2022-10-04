@@ -1,5 +1,5 @@
 DEBUG=True
-SECRET_KEY='secret_key'
+SECRET_KEY='django-insecure-7m97uu0uw6ug+j=l=^c#wefjeu6=&#0%=xo=urh(h&=gpzgzcd'
 DATABASE_URL=psql://:@:/
 POSTGRES_DB='todolist'
 POSTGRES_USER='todolist'
