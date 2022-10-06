@@ -33,8 +33,12 @@ services:
   postgres:
     image: postgres:12.4-alpine
     restart: always
-    env_file:
-      - .env.example
+#    env_file:
+#      - .env.example
+    environment:
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
     ports:
       - "5432:5432"
     volumes:
