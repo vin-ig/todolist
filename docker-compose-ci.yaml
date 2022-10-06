@@ -10,9 +10,7 @@ services:
       - backend
 
   api:
-    build:
-      context: .
-    image: ivinokurov/todolist
+    image: ivinokurov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     depends_on:
       postgres:
         condition: service_healthy
@@ -23,9 +21,7 @@ services:
 
 
   migrations:
-    build:
-      context: .
-    image: ivinokurov/todolist
+    image: ivinokurov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     depends_on:
       postgres:
         condition: service_healthy
