@@ -34,7 +34,7 @@ services:
     image: postgres:12.4-alpine
     restart: always
     env_file:
-      - .env
+      - .env.example
     ports:
       - "5432:5432"
     volumes:
