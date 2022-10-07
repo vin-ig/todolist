@@ -33,8 +33,6 @@ services:
   postgres:
     image: postgres:12.4-alpine
     restart: always
-#    env_file:
-#      - .env.example
     environment:
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
