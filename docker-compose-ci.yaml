@@ -10,26 +10,40 @@ services:
       - backend
 
   api:
-    build:
-      context: .
-    image: ivinokurov/todolist
+    image: ivinokurov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file:
+      - .docker_env
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
       migrations:
         condition: service_completed_successfully
+    volumes:
+      - ./.docker_env:/code/.docker_env
     networks:
       - backend
 
 
   migrations:
-    build:
-      context: .
-    image: ivinokurov/todolist
+    image: ivinokurov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file:
+      - .docker_env
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
     command: python manage.py migrate
+    volumes:
+      - ./.docker_env:/code/.docker_env
     networks:
       - backend
 
@@ -37,8 +51,10 @@ services:
   postgres:
     image: postgres:12.4-alpine
     restart: always
-    env_file:
-      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -54,6 +70,7 @@ services:
 
 volumes:
   db:
+  .docker_env:
 
 networks:
   backend:
