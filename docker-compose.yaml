@@ -11,8 +11,6 @@ services:
 
   api:
     image: ivinokurov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
-    environment:
-      SECRET_KEY: django-insecure-7m97uu0uw6ug+j=l=^c#wefjeu6=&#0%=xo=urh(h&=gpzgzcd
     depends_on:
       postgres:
         condition: service_healthy
@@ -27,6 +25,9 @@ services:
     environment:
       SECRET_KEY: django-insecure-7m97uu0uw6ug+j=l=^c#wefjeu6=&#0%=xo=urh(h&=gpzgzcd
       DATABASE_URL: psql://:@:/
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
