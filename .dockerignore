@@ -4,10 +4,10 @@ skymarket/
 tests/
 node_modules/
 media/
-mistakes.md
-
 #poetry.lock
 #pyproject.toml
+mistakes.md
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
