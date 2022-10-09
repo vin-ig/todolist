@@ -1,2 +1,3 @@
 DATABASE_URL=psql://:@:/
 POSTGRES_HOST=postgres
+TEST=${POSTGRES_USER}
