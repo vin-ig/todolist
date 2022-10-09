@@ -46,4 +46,4 @@ jobs:
           script: |
             cd todolist
             docker system prune -a -f
-            echo ${{ secrets.PASSWORD }} | sudo -S docker-compose up -d
+            docker-compose up -d
