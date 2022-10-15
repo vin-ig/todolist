@@ -25,4 +25,5 @@ users_router.register("users", UserViewSet, basename="users")
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('core/', include('core.urls')),
+    path('oauth/', include('social_django.urls', namespace='social')),
 ]
