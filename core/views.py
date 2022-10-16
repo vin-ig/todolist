@@ -16,14 +16,10 @@ class UserLoginView(CreateAPIView):
 	serializer_class = LoginSerializer
 
 	def post(self, request, *args, **kwargs):
-		username = request.data.get('username')
-		password = request.data.get('password')
-		user = authenticate(request, username=username, password=password)
-		if user:
-			login(request, user)
-			return Response(status=status.HTTP_201_CREATED)
-
-		return Response(data={'password': ['Invalid password']}, status=status.HTTP_400_BAD_REQUEST)
+		serializer = self.get_serializer(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		login(request=request, user=serializer.save())
+		return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class RetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
