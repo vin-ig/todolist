@@ -4,10 +4,17 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView,
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from core.serializers import User, RetrieveUpdateSerializer, UpdatePasswordSerializer
+from core.serializers import User, RetrieveUpdateSerializer, UpdatePasswordSerializer, LoginSerializer, SignUpSerializer
+
+
+class SignUpView(CreateAPIView):
+	queryset = User.objects.all()
+	serializer_class = SignUpSerializer
 
 
 class UserLoginView(CreateAPIView):
+	serializer_class = LoginSerializer
+
 	def post(self, request, *args, **kwargs):
 		username = request.data.get('username')
 		password = request.data.get('password')
