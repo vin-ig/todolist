@@ -7,8 +7,10 @@ media/
 mistakes.md
 stash
 
-#poetry.lock
-#pyproject.toml
+# Ignore
+.gitignore
+.dockerignore
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
