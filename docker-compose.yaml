@@ -1,8 +1,7 @@
 version: '3.9'
 services:
   front:
-    image: sermalenk/skypro-front:lesson-34
-    restart: always
+    image: sermalenk/skypro-front:lesson-35
     ports:
       - 80:80
     depends_on:
@@ -13,8 +12,7 @@ services:
   api:
     build:
       context: .
-    restart: always
-    image: ivinokurov/todolist
+#    image: ivinokurov/todolist
     env_file:
       - .docker_env
     environment:
@@ -37,8 +35,7 @@ services:
   migrations:
     build:
       context: .
-    restart: always
-    image: ivinokurov/todolist
+#    image: ivinokurov/todolist
     env_file:
       - .docker_env
     environment:
