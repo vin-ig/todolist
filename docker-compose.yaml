@@ -12,7 +12,6 @@ services:
   api:
     build:
       context: .
-#    image: ivinokurov/todolist
     env_file:
       - .docker_env
     environment:
@@ -35,7 +34,6 @@ services:
   migrations:
     build:
       context: .
-#    image: ivinokurov/todolist
     env_file:
       - .docker_env
     environment:

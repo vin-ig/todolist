@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'core',
     'social_django',
+    'goals',
 ]
 
 MIDDLEWARE = [
