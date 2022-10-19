@@ -53,12 +53,18 @@ class GoalCreateSerializer(serializers.ModelSerializer):
 
 # Комментарии
 class CommentCreateSerializer(serializers.ModelSerializer):
-	# goal = serializers.HiddenField(default=serializers.context['request'].user)
-
 	class Meta:
 		model = GoalComment
 		read_only_fields = ("id", "created", "updated")
 		fields = "__all__"
+
+	def validate_goal(self, value):
+		if value.is_deleted:
+			raise serializers.ValidationError("not allowed in deleted goal")
+		if value.user != self.context["request"].user:
+			raise serializers.ValidationError("not owner of goal")
+
+		return value
 
 
 class CommentSerializer(serializers.ModelSerializer):
