@@ -63,16 +63,20 @@ class GoalListView(ListAPIView):
 	model = Goal
 	serializer_class = GoalSerializer
 	permission_classes = [permissions.IsAuthenticated]
+	ordering_fields = ["due_date"]
+	ordering = ["-priority", "due_date"]
+	search_fields = ["title", "description"]
+	filter_backends = [
+		DjangoFilterBackend,
+		filters.OrderingFilter,
+		filters.SearchFilter,
+	]
+	filterset_class = GoalDateFilter
 
 	def get_queryset(self):
 		return Goal.objects.filter(
 			user=self.request.user, is_deleted=False
 		)
-
-	# filter_backends = [
-	#     DjangoFilterBackend,
-	# ]
-	# filterset_class = GoalDateFilter
 
 
 class GoalView(RetrieveUpdateDestroyAPIView):
