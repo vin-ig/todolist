@@ -55,3 +55,8 @@ class Goal(DatesModelMixin):
 		verbose_name="Приоритет", choices=Priority.choices, default=Priority.medium
 	)
 	due_date = models.DateTimeField(verbose_name="Дата дедлайна")
+
+
+class GoalComment(DatesModelMixin):
+	text = models.CharField(verbose_name="Текст", max_length=255)
+	goal = models.ForeignKey(Goal, verbose_name="Цель", on_delete=models.PROTECT)

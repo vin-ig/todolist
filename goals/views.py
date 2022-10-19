@@ -4,8 +4,9 @@ from rest_framework import permissions, filters
 from rest_framework.pagination import LimitOffsetPagination
 
 from goals.filters import GoalDateFilter
-from goals.models import GoalCategory, Goal
-from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, GoalSerializer, GoalCategoryCreateSerializer
+from goals.models import GoalCategory, Goal, GoalComment
+from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, GoalSerializer, \
+	GoalCategoryCreateSerializer, CommentSerializer, CommentCreateSerializer
 
 
 # Категории
@@ -63,6 +64,7 @@ class GoalListView(ListAPIView):
 	model = Goal
 	serializer_class = GoalSerializer
 	permission_classes = [permissions.IsAuthenticated]
+	pagination_class = LimitOffsetPagination
 	ordering_fields = ["due_date"]
 	ordering = ["-priority", "due_date"]
 	search_fields = ["title", "description"]
@@ -94,3 +96,35 @@ class GoalView(RetrieveUpdateDestroyAPIView):
 		instance.status = 4
 		instance.save()
 		return instance
+
+
+# Комментарии
+class CommentCreateView(CreateAPIView):
+	model = GoalComment
+	permission_classes = [permissions.IsAuthenticated]
+	serializer_class = CommentCreateSerializer
+
+
+class CommentListView(ListAPIView):
+	model = GoalComment
+	serializer_class = CommentSerializer
+	pagination_class = LimitOffsetPagination
+	permission_classes = [permissions.IsAuthenticated]
+	ordering = ["-due_date"]
+	filter_backends = [filters.OrderingFilter]
+
+	def get_queryset(self):
+		return Goal.objects.filter(
+			user=self.request.user, is_deleted=False
+		)
+
+
+class CommentView(RetrieveUpdateDestroyAPIView):
+	model = GoalComment
+	serializer_class = CommentSerializer
+	permission_classes = [permissions.IsAuthenticated]
+
+	def get_queryset(self):
+		return Goal.objects.filter(
+			user=self.request.user, is_deleted=False
+		)
