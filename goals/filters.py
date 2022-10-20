@@ -11,6 +11,7 @@ class GoalDateFilter(rest_framework.FilterSet):
         fields = {
             "due_date": ("lte", "gte"),
             "category": ("exact", "in"),
+            "status": ("exact", "in"),
             "priority": ("exact", "in"),
         }
 

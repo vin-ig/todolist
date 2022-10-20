@@ -6,15 +6,15 @@ from core.models import User
 
 class DatesModelMixin(models.Model):
 	class Meta:
-		abstract = True  # Помечаем класс как абстрактный – для него не будет таблички в БД
+		abstract = True
 
 	created = models.DateTimeField(verbose_name="Дата создания")
 	updated = models.DateTimeField(verbose_name="Дата последнего обновления")
 
 	def save(self, *args, **kwargs):
-		if not self.id:  # Когда модель только создается – у нее нет id
+		if not self.id:
 			self.created = timezone.now()
-		self.updated = timezone.now()  # Каждый раз, когда вызывается save, проставляем свежую дату обновления
+		self.updated = timezone.now()
 		return super().save(*args, **kwargs)
 
 
@@ -50,7 +50,7 @@ class Goal(DatesModelMixin):
 	title = models.CharField(verbose_name="Название", max_length=255)
 	description = models.CharField(verbose_name="Описание", max_length=255)
 	user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT)
-	category = models.ForeignKey(GoalCategory, verbose_name="Категория", on_delete=models.PROTECT, null=True)
+	category = models.ForeignKey(GoalCategory, verbose_name="Категория", on_delete=models.PROTECT)
 	is_deleted = models.BooleanField(verbose_name="Удалена", default=False)
 	status = models.PositiveSmallIntegerField(
 		verbose_name="Статус", choices=Status.choices, default=Status.to_do
@@ -58,7 +58,7 @@ class Goal(DatesModelMixin):
 	priority = models.PositiveSmallIntegerField(
 		verbose_name="Приоритет", choices=Priority.choices, default=Priority.medium
 	)
-	due_date = models.DateTimeField(verbose_name="Дата дедлайна")
+	due_date = models.DateField(verbose_name="Дата дедлайна")
 
 
 class GoalComment(DatesModelMixin):
