@@ -1,3 +1,4 @@
+from django_filters import filterset
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import permissions, filters
@@ -110,13 +111,12 @@ class CommentListView(ListAPIView):
 	serializer_class = CommentSerializer
 	pagination_class = LimitOffsetPagination
 	permission_classes = [permissions.IsAuthenticated]
-	ordering = ["-due_date"]
-	filter_backends = [filters.OrderingFilter]
+	ordering = ["-created"]
+	filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
+	filterset_fields = ["goal"]
 
 	def get_queryset(self):
-		return Goal.objects.filter(
-			user=self.request.user, is_deleted=False
-		)
+		return GoalComment.objects.filter(user=self.request.user)
 
 
 class CommentView(RetrieveUpdateDestroyAPIView):
@@ -125,6 +125,4 @@ class CommentView(RetrieveUpdateDestroyAPIView):
 	permission_classes = [permissions.IsAuthenticated]
 
 	def get_queryset(self):
-		return Goal.objects.filter(
-			user=self.request.user, is_deleted=False
-		)
+		return GoalComment.objects.filter(user=self.request.user)

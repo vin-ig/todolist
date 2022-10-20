@@ -14,5 +14,5 @@ urlpatterns = [
 
     path("goal_comment/create", views.CommentCreateView.as_view()),
     path("goal_comment/list", views.CommentListView.as_view()),
-    path("goal_comment/<int:pk>", views.CommentView.as_view()),
+    path("goal_comment/<pk>", views.CommentView.as_view()),
 ]

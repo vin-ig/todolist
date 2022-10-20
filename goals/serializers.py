@@ -53,6 +53,8 @@ class GoalCreateSerializer(serializers.ModelSerializer):
 
 # Комментарии
 class CommentCreateSerializer(serializers.ModelSerializer):
+	user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
 	class Meta:
 		model = GoalComment
 		read_only_fields = ("id", "created", "updated")
@@ -68,7 +70,7 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-	goal = GoalSerializer(read_only=True)
+	user = RetrieveUpdateSerializer(read_only=True)
 
 	class Meta:
 		model = GoalComment
