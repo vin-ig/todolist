@@ -43,6 +43,10 @@ class GoalCategory(DatesModelMixin):
 
 
 class Goal(DatesModelMixin):
+	class Meta:
+		verbose_name = "Цель"
+		verbose_name_plural = "Цели"
+
 	title = models.CharField(verbose_name="Название", max_length=255)
 	description = models.CharField(verbose_name="Описание", max_length=255)
 	user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT)
@@ -58,6 +62,10 @@ class Goal(DatesModelMixin):
 
 
 class GoalComment(DatesModelMixin):
+	class Meta:
+		verbose_name = "Комментарий"
+		verbose_name_plural = "Комментарии"
+
 	text = models.CharField(verbose_name="Текст", max_length=255)
 	goal = models.ForeignKey(Goal, verbose_name="Цель", on_delete=models.PROTECT)
 	user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT)
