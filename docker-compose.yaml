@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   front:
-    image: sermalenk/skypro-front:lesson-35
+    image: sermalenk/skypro-front:lesson-36
     ports:
       - 80:80
     depends_on:
@@ -12,7 +12,6 @@ services:
   api:
     build:
       context: .
-#    image: ivinokurov/todolist
     env_file:
       - .docker_env
     environment:
@@ -35,7 +34,6 @@ services:
   migrations:
     build:
       context: .
-#    image: ivinokurov/todolist
     env_file:
       - .docker_env
     environment:
