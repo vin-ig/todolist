@@ -1,13 +1,16 @@
+from django.db import transaction
 from django_filters import filterset
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import permissions, filters
 from rest_framework.pagination import LimitOffsetPagination
 
+from goals import models
 from goals.filters import GoalDateFilter
-from goals.models import GoalCategory, Goal, GoalComment
+from goals.models import GoalCategory, Goal, GoalComment, Board
+from goals.permissions import BoardPermissions
 from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, GoalSerializer, \
-	GoalCategoryCreateSerializer, CommentSerializer, CommentCreateSerializer
+	GoalCategoryCreateSerializer, CommentSerializer, CommentCreateSerializer, BoardSerializer, BoardCreateSerializer
 
 
 # Категории
@@ -126,3 +129,44 @@ class CommentView(RetrieveUpdateDestroyAPIView):
 
 	def get_queryset(self):
 		return GoalComment.objects.filter(user=self.request.user)
+
+
+# Доски
+class BoardCreateView(CreateAPIView):
+	model = Board
+	permission_classes = [permissions.IsAuthenticated]
+	serializer_class = BoardCreateSerializer
+
+
+class BoardListView(ListAPIView):
+	model = Board
+	serializer_class = BoardSerializer
+	pagination_class = LimitOffsetPagination
+	permission_classes = [permissions.IsAuthenticated]
+	ordering = ["title"]
+	filter_backends = [filters.OrderingFilter]
+
+	def get_queryset(self):
+		return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
+
+
+class BoardView(RetrieveUpdateDestroyAPIView):
+	model = Board
+	permission_classes = [permissions.IsAuthenticated, BoardPermissions]
+	serializer_class = BoardSerializer
+
+	def get_queryset(self):
+		# Обратите внимание на фильтрацию – она идет через participants
+		return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
+
+	def perform_destroy(self, instance: Board):
+		# При удалении доски помечаем ее как is_deleted,
+		# «удаляем» категории, обновляем статус целей
+		with transaction.atomic():
+			instance.is_deleted = True
+			instance.save()
+			instance.categories.update(is_deleted=True)
+			Goal.objects.filter(category__board=instance).update(
+				status=models.Status.archived
+			)
+		return instance
