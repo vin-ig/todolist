@@ -6,9 +6,9 @@ from rest_framework import permissions, filters
 from rest_framework.pagination import LimitOffsetPagination
 
 from goals import models
-from goals.filters import GoalDateFilter
+from goals.filters import GoalDateFilter, CategoryBoardFilter
 from goals.models import GoalCategory, Goal, GoalComment, Board
-from goals.permissions import BoardPermissions
+from goals.permissions import BoardPermissions, GoalCategoryPermissions
 from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, GoalSerializer, \
 	GoalCategoryCreateSerializer, CommentSerializer, CommentCreateSerializer, BoardSerializer, BoardCreateSerializer
 
@@ -16,7 +16,7 @@ from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, Goal
 # Категории
 class GoalCategoryCreateView(CreateAPIView):
 	model = GoalCategory
-	permission_classes = [permissions.IsAuthenticated]
+	permission_classes = [permissions.IsAuthenticated, GoalCategoryPermissions]
 	serializer_class = GoalCategoryCreateSerializer
 
 
@@ -26,27 +26,29 @@ class GoalCategoryListView(ListAPIView):
 	serializer_class = GoalCategorySerializer
 	pagination_class = LimitOffsetPagination
 	filter_backends = [
+		DjangoFilterBackend,
 		filters.OrderingFilter,
 		filters.SearchFilter,
 	]
 	ordering_fields = ["title", "created"]
 	ordering = ["title"]
 	search_fields = ["title"]
+	filterset_class = CategoryBoardFilter
 
 	def get_queryset(self):
 		return GoalCategory.objects.filter(
-			user=self.request.user, is_deleted=False
+			board__participants__user=self.request.user, is_deleted=False
 		)
 
 
 class GoalCategoryView(RetrieveUpdateDestroyAPIView):
 	model = GoalCategory
 	serializer_class = GoalCategorySerializer
-	permission_classes = [permissions.IsAuthenticated]
+	permission_classes = [permissions.IsAuthenticated, GoalCategoryPermissions]
 
 	def get_queryset(self):
 		return GoalCategory.objects.filter(
-			user=self.request.user, is_deleted=False
+			board__participants__user=self.request.user, is_deleted=False
 		)
 
 	def perform_destroy(self, instance):
