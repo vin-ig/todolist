@@ -8,7 +8,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from goals import models
 from goals.filters import GoalDateFilter, CategoryBoardFilter
 from goals.models import GoalCategory, Goal, GoalComment, Board
-from goals.permissions import BoardPermissions, GoalCategoryPermissions, GoalPermissions
+from goals.permissions import BoardPermissions, GoalCategoryPermissions, GoalPermissions, CommentPermissions
 from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, GoalSerializer, \
 	GoalCategoryCreateSerializer, CommentSerializer, CommentCreateSerializer, BoardSerializer, BoardCreateSerializer
 
@@ -16,7 +16,7 @@ from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, Goal
 # Категории
 class GoalCategoryCreateView(CreateAPIView):
 	model = GoalCategory
-	permission_classes = [permissions.IsAuthenticated, GoalCategoryPermissions]
+	permission_classes = [permissions.IsAuthenticated, GoalCategoryPermissions]  # Check the permissions
 	serializer_class = GoalCategoryCreateSerializer
 
 
@@ -62,7 +62,7 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
 # Цели
 class GoalCreateView(CreateAPIView):
 	model = Goal
-	permission_classes = [permissions.IsAuthenticated, GoalPermissions]
+	permission_classes = [permissions.IsAuthenticated, GoalPermissions]  # Check the permissions
 	serializer_class = GoalCreateSerializer
 
 
@@ -107,7 +107,7 @@ class GoalView(RetrieveUpdateDestroyAPIView):
 # Комментарии
 class CommentCreateView(CreateAPIView):
 	model = GoalComment
-	permission_classes = [permissions.IsAuthenticated]
+	permission_classes = [permissions.IsAuthenticated, CommentPermissions]  # Не работают пермишены
 	serializer_class = CommentCreateSerializer
 
 
