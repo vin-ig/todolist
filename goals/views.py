@@ -8,7 +8,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from goals import models
 from goals.filters import GoalDateFilter, CategoryBoardFilter
 from goals.models import GoalCategory, Goal, GoalComment, Board
-from goals.permissions import BoardPermissions, GoalCategoryPermissions
+from goals.permissions import BoardPermissions, GoalCategoryPermissions, GoalPermissions
 from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, GoalSerializer, \
 	GoalCategoryCreateSerializer, CommentSerializer, CommentCreateSerializer, BoardSerializer, BoardCreateSerializer
 
@@ -83,18 +83,18 @@ class GoalListView(ListAPIView):
 
 	def get_queryset(self):
 		return Goal.objects.filter(
-			user=self.request.user, is_deleted=False
+			category__board__participants__user=self.request.user, is_deleted=False
 		)
 
 
 class GoalView(RetrieveUpdateDestroyAPIView):
 	model = Goal
 	serializer_class = GoalSerializer
-	permission_classes = [permissions.IsAuthenticated]
+	permission_classes = [permissions.IsAuthenticated, GoalPermissions]
 
 	def get_queryset(self):
 		return Goal.objects.filter(
-			user=self.request.user, is_deleted=False
+			category__board__participants__user=self.request.user, is_deleted=False
 		)
 
 	def perform_destroy(self, instance):
