@@ -15,7 +15,7 @@ from goals import serializers
 # Категории
 class GoalCategoryCreateView(CreateAPIView):
 	model = GoalCategory
-	permission_classes = [permissions.IsAuthenticated, GoalCategoryPermissions]  # Check the permissions
+	permission_classes = [permissions.IsAuthenticated, GoalCategoryPermissions]
 	serializer_class = serializers.GoalCategoryCreateSerializer
 
 
@@ -61,7 +61,7 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
 # Цели
 class GoalCreateView(CreateAPIView):
 	model = Goal
-	permission_classes = [permissions.IsAuthenticated, GoalPermissions]  # Check the permissions
+	permission_classes = [permissions.IsAuthenticated, GoalPermissions]
 	serializer_class = serializers.GoalCreateSerializer
 
 
@@ -106,7 +106,7 @@ class GoalView(RetrieveUpdateDestroyAPIView):
 # Комментарии
 class CommentCreateView(CreateAPIView):
 	model = GoalComment
-	permission_classes = [permissions.IsAuthenticated, CommentPermissions]  # Не работают пермишены
+	permission_classes = [permissions.IsAuthenticated, CommentPermissions]
 	serializer_class = serializers.CommentCreateSerializer
 
 
@@ -157,12 +157,9 @@ class BoardView(RetrieveUpdateDestroyAPIView):
 	serializer_class = serializers.BoardSerializer
 
 	def get_queryset(self):
-		# Обратите внимание на фильтрацию – она идет через participants
 		return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
 
 	def perform_destroy(self, instance: Board):
-		# При удалении доски помечаем ее как is_deleted,
-		# «удаляем» категории, обновляем статус целей
 		with transaction.atomic():
 			instance.is_deleted = True
 			instance.save()
