@@ -25,8 +25,9 @@ class GoalCategoryPermissions(permissions.BasePermission):
 				user=request.user, board=obj.board
 			).exists()
 		return BoardParticipant.objects.filter(
-			user=request.user, board=obj.board, role=BoardParticipant.Role.owner
-		).exists()  # Проверить роли, как в GoalPermissions
+			user=request.user, board=obj.board,
+			role__in=(BoardParticipant.Role.owner, BoardParticipant.Role.writer)
+		).exists()
 
 
 class GoalPermissions(permissions.BasePermission):
@@ -45,17 +46,10 @@ class GoalPermissions(permissions.BasePermission):
 
 class CommentPermissions(permissions.BasePermission):
 	def has_object_permission(self, request, view, obj):
-		print(BoardParticipant.objects.filter(
-			user=request.user, board=obj.goal.category.board,
-			role__in=(BoardParticipant.Role.owner, BoardParticipant.Role.writer)
-		).exists())
 		if not request.user.is_authenticated:
 			return False
 		if request.method in permissions.SAFE_METHODS:
 			return BoardParticipant.objects.filter(
 				user=request.user, board=obj.goal.category.board
 			).exists()
-		return BoardParticipant.objects.filter(
-			user=request.user, board=obj.goal.category.board,
-			role__in=(BoardParticipant.Role.owner, BoardParticipant.Role.writer)
-		).exists()
+		return request.user == obj.user
