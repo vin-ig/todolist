@@ -1,11 +1,9 @@
 from django.db import transaction
-from django_filters import filterset
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import permissions, filters
 from rest_framework.pagination import LimitOffsetPagination
 
-from goals import models
 from goals.filters import GoalDateFilter
 from goals.models import GoalCategory, Goal, GoalComment, Board
 from goals.permissions import BoardPermissions, GoalCategoryPermissions, GoalPermissions, CommentPermissions
@@ -165,6 +163,6 @@ class BoardView(RetrieveUpdateDestroyAPIView):
 			instance.save()
 			instance.categories.update(is_deleted=True)
 			Goal.objects.filter(category__board=instance).update(
-				status=models.Status.archived
+				status=Goal.Status.archived
 			)
 		return instance
