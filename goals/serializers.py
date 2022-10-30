@@ -127,7 +127,6 @@ class BoardSerializer(serializers.ModelSerializer):
 		read_only_fields = ("id", "created", "updated")
 
 	def update(self, instance, validated_data):
-		# owner = validated_data.pop("user")
 		if validated_data.get("participants"):
 			new_participants = validated_data.pop("participants")
 			new_by_id = {part["user"].id: part for part in new_participants}

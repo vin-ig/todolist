@@ -50,8 +50,13 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
 
 	def perform_destroy(self, instance):
 		instance.is_deleted = True
-		for goal in Goal.objects.filter(category=instance.id):
-			GoalView().perform_destroy(goal)
+		goals = Goal.objects.filter(category=instance)
+
+		for goal in goals:
+			goal.is_deleted = True
+			goal.status = 4
+
+		goals.bulk_update(goals, ['is_deleted', 'status'])
 		instance.save()
 		return instance
 
