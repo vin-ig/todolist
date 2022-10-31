@@ -56,7 +56,6 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
 			goal.is_deleted = True
 			goal.status = 4
 
-		goals.bulk_update(goals, ['is_deleted', 'status'])
 		instance.save()
 		return instance
 
