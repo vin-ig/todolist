@@ -1,7 +1,6 @@
-from dataclasses import dataclass
-from typing import List
+from dataclasses import dataclass, field
+from typing import List, Optional
 from marshmallow import EXCLUDE
-from datetime import datetime
 
 
 @dataclass
@@ -10,7 +9,10 @@ class MessageFrom:
 	is_bot: bool
 	first_name: str
 	username: str
-	language_code: str
+	language_code: Optional[str]
+
+	class Meta:
+		unknown = EXCLUDE
 
 
 @dataclass
@@ -20,14 +22,20 @@ class Chat:
 	username: str
 	type: str
 
+	class Meta:
+		unknown = EXCLUDE
+
 
 @dataclass
 class Message:
 	message_id: int
-	message_from: MessageFrom
+	message_from: MessageFrom = field(metadata={"data_key": "from"})
 	chat: Chat
-	date: datetime.timestamp
+	date: int
 	text: str
+
+	class Meta:
+		unknown = EXCLUDE
 
 
 @dataclass
@@ -43,6 +51,9 @@ class SendMessageResponse:
 class UpdateObj:
 	update_id: int
 	message: Message
+
+	class Meta:
+		unknown = EXCLUDE
 
 
 @dataclass
