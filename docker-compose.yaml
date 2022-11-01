@@ -11,6 +11,7 @@ services:
 
   api:
     build:
+      dockerfile: Dockerfile
       context: .
     env_file:
       - .docker_env

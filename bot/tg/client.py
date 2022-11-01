@@ -30,4 +30,5 @@ class TgClient:
 
 
 # response = TgClient(env('TG_BOT_TOKEN'))
+# print(response.get_updates(offset=885841545))
 # print(response.send_message(env('chat_id'), 'Leeroy Jenkins!'))
