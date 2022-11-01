@@ -11,6 +11,6 @@ class Command(BaseCommand):
 			res = tg_client.get_updates(offset=offset, timeout=5)
 			for item in res.result:
 				offset = item.update_id + 1
-				chat_id = item.message.chat.id
-				tg_client.send_message(chat_id=chat_id, text='Пиши еще!')
+				text = 'Пиши еще!'
+				tg_client.send_message(chat_id=item.message.chat.id, text=text)
 				print(item.message)
