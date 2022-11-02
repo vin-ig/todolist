@@ -20,10 +20,10 @@ class TgClient:
 		RequestSchema = marshmallow_dataclass.class_schema(GetUpdatesResponse)
 		return RequestSchema().load(request)
 
-	def send_message(self, chat_id: int, text: str) -> SendMessageResponse:
+	def send_message(self, chat_id: int, text: str, parse_mode='Markdown') -> SendMessageResponse:
 		request = requests.get(
 			self.get_url('sendMessage'),
-			params={'chat_id': chat_id, 'text': text}
+			params={'chat_id': chat_id, 'text': text, 'parse_mode': parse_mode}
 		).json()
 		RequestSchema = marshmallow_dataclass.class_schema(SendMessageResponse)
 		return RequestSchema().load(request)
