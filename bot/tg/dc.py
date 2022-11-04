@@ -27,12 +27,20 @@ class Chat:
 
 
 @dataclass
+class Entity:
+	offset: int
+	length: int
+	type: str
+
+
+@dataclass
 class Message:
 	message_id: int
 	message_from: MessageFrom = field(metadata={"data_key": "from"})
 	chat: Chat
 	date: int
 	text: str
+	entities: Optional[List[Entity]]
 
 	class Meta:
 		unknown = EXCLUDE
