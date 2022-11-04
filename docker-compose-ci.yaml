@@ -68,6 +68,29 @@ services:
       - backend
 
 
+  bot:
+    image: ivinokurov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file:
+      - .docker_env
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: postgres
+      TG_BOT_TOKEN: ${TG_BOT_TOKEN}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    volumes:
+      - ./.docker_env:/code/.docker_env
+    networks:
+      - backend
+    command: python manage.py runbot
+
+
 volumes:
   db:
   .docker_env:

@@ -2,7 +2,6 @@ import marshmallow_dataclass
 import requests
 
 from bot.tg.dc import GetUpdatesResponse, SendMessageResponse
-from todolist.settings import env
 
 
 class TgClient:
@@ -27,8 +26,3 @@ class TgClient:
 		).json()
 		RequestSchema = marshmallow_dataclass.class_schema(SendMessageResponse)
 		return RequestSchema().load(request)
-
-
-# response = TgClient(env('TG_BOT_TOKEN'))
-# print(response.get_updates(offset=885841545))
-# print(response.send_message(env('chat_id'), 'Leeroy Jenkins!'))
