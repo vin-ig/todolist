@@ -9,6 +9,6 @@ class TgUser(models.Model):
 		verbose_name_plural = 'Пользователи Telegram'
 
 	tg_id = models.IntegerField(verbose_name='ID чата')
-	username = models.IntegerField(verbose_name='Username пользователя в tg')
-	user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.PROTECT)
+	username = models.CharField(max_length=50, verbose_name='Username пользователя в tg')
+	user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.PROTECT, null=True)
 	verification_code = models.CharField(max_length=150, verbose_name='Код верификации')
