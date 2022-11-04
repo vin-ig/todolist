@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand
 
 from bot.models import TgUser
 from bot.tg.client import TgClient
+from goals.models import Goal
 from todolist.settings import env
 
 
@@ -32,7 +33,7 @@ class Command(BaseCommand):
 					text = f'Привет! Кажется, мы еще не знакомы? Для подтверждения аккаунта ' \
 					       f'введи этот код на сайте: *{verification_code}*'
 				elif item.message.text == '/goals':
-					text = 'Отправляем цели'
+					text = self._get_goals(tg_user.user)
 				else:
 					text = 'Неизвестная команда, попробуй еще!'
 
@@ -43,3 +44,8 @@ class Command(BaseCommand):
 	def _generate_code(length):
 		letters = string.ascii_uppercase
 		return ''.join(random.choice(letters) for i in range(length))
+
+	@staticmethod
+	def _get_goals(user):
+		goals = Goal.objects.filter(user=user, is_deleted=False)
+		return '\n'.join([i.title for i in goals])
