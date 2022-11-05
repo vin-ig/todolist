@@ -29,7 +29,7 @@ class Command(BaseCommand):
 		tg_client = TgClient(env('TG_BOT_TOKEN'))
 		state = None
 		while True:
-			res = tg_client.get_updates(offset=offset, timeout=5)
+			res = tg_client.get_updates(offset=offset)
 			for item in res.result:
 				offset = item.update_id + 1
 				chat_id = item.message.chat.id
