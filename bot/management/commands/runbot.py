@@ -51,7 +51,7 @@ class Command(BaseCommand):
 				if state == State.not_in_db:
 					TgUser.objects.create(
 						tg_id=chat_id,
-						username=item.message.chat.username,
+						username=item.message.chat.username if item.message.chat.username else None,
 					)
 					state = State.no_verify
 
