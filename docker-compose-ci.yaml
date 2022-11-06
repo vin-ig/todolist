@@ -19,6 +19,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_HOST: postgres
+      VK_OAUTH_KEY: ${VK_OAUTH_KEY}
+      VK_OAUTH_SECRET: ${VK_OAUTH_SECRET}
     depends_on:
       postgres:
         condition: service_healthy
@@ -40,6 +42,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_HOST: postgres
+      VK_OAUTH_KEY: ${VK_OAUTH_KEY}
+      VK_OAUTH_SECRET: ${VK_OAUTH_SECRET}
     depends_on:
       postgres:
         condition: service_healthy
@@ -79,6 +83,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_HOST: postgres
       TG_BOT_TOKEN: ${TG_BOT_TOKEN}
+      VK_OAUTH_KEY: ${VK_OAUTH_KEY}
+      VK_OAUTH_SECRET: ${VK_OAUTH_SECRET}
     depends_on:
       postgres:
         condition: service_healthy
