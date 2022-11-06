@@ -13,3 +13,8 @@ ___
 docker-compose up -d
 python manage.py migrate
 ```
+___
+### Шпаргалка
+``git checkout -b new_branch`` # создать новую ветку с указанным именем и перейти в неё
+
+``git branch -d hotfix`` # удалить ветку hotfix (если её изменения уже влиты в главную ветку)
