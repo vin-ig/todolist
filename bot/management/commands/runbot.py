@@ -11,18 +11,21 @@ from goals.models import Goal, GoalCategory
 from todolist.settings import env
 
 
-class Command(BaseCommand):
-	class BotCommands:
-		goals = '/goals'
-		create = '/create'
-		cancel = '/cancel'
+class BotCommands:
+	goals = '/goals'
+	create = '/create'
+	cancel = '/cancel'
 
-	class State(enum.Enum):
-		not_in_db = 'A'
-		no_verify = 'B'
-		wait_command = 'C'
-		choice_category = 'Create 1'
-		create_goal = 'Create 2'
+
+class State(enum.Enum):
+	not_in_db = enum.auto()
+	no_verify = enum.auto()
+	wait_command = enum.auto()
+	choice_category = enum.auto()
+	create_goal = enum.auto()
+
+
+class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 		offset = 0
@@ -36,26 +39,26 @@ class Command(BaseCommand):
 
 				# Описываем состояния
 				if not state and not TgUser.objects.filter(tg_id=chat_id):
-					state = self.State.not_in_db
+					state = State.not_in_db
 				elif not TgUser.objects.get(tg_id=chat_id).user:
-					state = self.State.no_verify
-				elif state not in (self.State.choice_category, self.State.create_goal):
-					state = self.State.wait_command
+					state = State.no_verify
+				elif state not in (State.choice_category, State.create_goal):
+					state = State.wait_command
 
 				# Действия в зависимости от состояний
 
 				# Если пользователя еще нет в базе
-				if state == self.State.not_in_db:
+				if state == State.not_in_db:
 					TgUser.objects.create(
 						tg_id=chat_id,
 						username=item.message.chat.username,
 					)
-					state = self.State.no_verify
+					state = State.no_verify
 
 				tg_user = TgUser.objects.get(tg_id=chat_id)
 
 				# Если пользователь не верифицирован
-				if state == self.State.no_verify:
+				if state == State.no_verify:
 					verification_code = self._generate_code(5)
 					tg_user.verification_code = verification_code
 					tg_user.save()
@@ -65,37 +68,37 @@ class Command(BaseCommand):
 					continue
 
 				# Бот ожидает команду
-				if state == self.State.wait_command:
-					if item.message.text == self.BotCommands.goals:
+				if state == State.wait_command:
+					if item.message.text == BotCommands.goals:
 						text = self._get_goals(tg_user.user)
 						tg_client.send_message(chat_id=chat_id, text=text)
-					elif item.message.text == self.BotCommands.create:
+					elif item.message.text == BotCommands.create:
 						categories = self._get_categories(tg_user.user)
 						text = categories['text']
 						tg_client.send_message(chat_id=chat_id, text=text)
-						state = self.State.choice_category
+						state = State.choice_category
 						continue
 					else:
 						text = 'Неизвестная команда, попробуйте еще!'
 						tg_client.send_message(chat_id=chat_id, text=text)
 
 				# Выбор категории
-				if state == self.State.choice_category:
+				if state == State.choice_category:
 					if item.message.text in [i.title for i in categories['categories']]:
 						goal_category = GoalCategory.objects.get(title=item.message.text, user=tg_user.user)
 						text = 'Введите название цели:'
 						tg_client.send_message(chat_id=item.message.chat.id, text=text)
-						state = self.State.create_goal
+						state = State.create_goal
 						continue
-					elif item.message.text == self.BotCommands.cancel:
+					elif item.message.text == BotCommands.cancel:
 						text = 'Создание цели отменено'
-						state = self.State.wait_command
+						state = State.wait_command
 					else:
 						text = 'Неправильная категория. Попробуйте еще!'
 					tg_client.send_message(chat_id=item.message.chat.id, text=text)
 
 				# Создание цели
-				if state == self.State.create_goal:
+				if state == State.create_goal:
 					goal_title = item.message.text
 					Goal.objects.create(
 						title=goal_title,
@@ -105,7 +108,7 @@ class Command(BaseCommand):
 					)
 					text = 'Цель создана!'
 					tg_client.send_message(chat_id=item.message.chat.id, text=text)
-					state = self.State.wait_command
+					state = State.wait_command
 
 				print(item.message.text)
 
