@@ -3,6 +3,7 @@ import random
 import string
 import datetime
 
+import marshmallow
 from django.core.management.base import BaseCommand
 
 from bot.models import TgUser
@@ -32,7 +33,10 @@ class Command(BaseCommand):
 		tg_client = TgClient(env('TG_BOT_TOKEN'))
 		state = None
 		while True:
-			res = tg_client.get_updates(offset=offset)
+			try:
+				res = tg_client.get_updates(offset=offset)
+			except marshmallow.exceptions.ValidationError:
+				continue
 			for item in res.result:
 				offset = item.update_id + 1
 				chat_id = item.message.chat.id
