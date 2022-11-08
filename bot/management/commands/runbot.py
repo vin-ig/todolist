@@ -36,7 +36,7 @@ class Command(BaseCommand):
 			try:
 				res = tg_client.get_updates(offset=offset)
 			except Exception as error:
-				print(error)
+				print(error, end='\n\n')
 				continue
 			for item in res.result:
 				offset = item.update_id + 1
@@ -115,7 +115,7 @@ class Command(BaseCommand):
 					tg_client.send_message(chat_id=item.message.chat.id, text=text)
 					state = State.wait_command
 
-				print(item.message)
+				print(f'{item.message.message_from.first_name}: {item.message.text}', end='\n\n')
 
 	@staticmethod
 	def _generate_code(length):
