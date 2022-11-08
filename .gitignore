@@ -1,7 +1,6 @@
 # Own ignore-files
 db/
 skymarket/
-tests/
 node_modules/
 media/
 mistakes.md
