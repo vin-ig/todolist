@@ -2,6 +2,7 @@ version: '3.9'
 services:
   front:
     image: sermalenk/skypro-front:lesson-38
+    restart: always
     ports:
       - 80:80
     depends_on:
@@ -11,6 +12,7 @@ services:
 
   api:
     image: ivinokurov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    restart: always
     env_file:
       - .docker_env
     environment:
@@ -34,6 +36,7 @@ services:
 
   migrations:
     image: ivinokurov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    restart: always
     env_file:
       - .docker_env
     environment:
@@ -74,6 +77,7 @@ services:
 
   bot:
     image: ivinokurov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    restart: always
     env_file:
       - .docker_env
     environment:

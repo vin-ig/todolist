@@ -35,7 +35,8 @@ class Command(BaseCommand):
 		while True:
 			try:
 				res = tg_client.get_updates(offset=offset)
-			except marshmallow.exceptions.ValidationError:
+			except Exception as error:
+				print(error)
 				continue
 			for item in res.result:
 				offset = item.update_id + 1
@@ -114,7 +115,7 @@ class Command(BaseCommand):
 					tg_client.send_message(chat_id=item.message.chat.id, text=text)
 					state = State.wait_command
 
-				print(item.message.text)
+				print(item.message)
 
 	@staticmethod
 	def _generate_code(length):
