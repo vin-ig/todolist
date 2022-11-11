@@ -143,7 +143,7 @@ class BoardCreateView(CreateAPIView):
 
 class BoardListView(ListAPIView):
 	model = Board
-	serializer_class = serializers.BoardSerializer
+	serializer_class = serializers.BoardListSerializer
 	pagination_class = LimitOffsetPagination
 	permission_classes = [permissions.IsAuthenticated]
 	ordering = ["title"]

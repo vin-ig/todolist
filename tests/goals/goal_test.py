@@ -83,6 +83,3 @@ def test_goal_delete(client, get_credentials, goal, board_participant):
 
 	assert response.status_code == 204
 	assert response.data is None
-
-
-

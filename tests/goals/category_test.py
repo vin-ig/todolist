@@ -72,6 +72,3 @@ def test_category_delete(client, get_credentials, goal_category, board_participa
 
 	assert response.status_code == 204
 	assert response.data is None
-
-
-

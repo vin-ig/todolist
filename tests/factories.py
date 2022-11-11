@@ -19,7 +19,7 @@ class BoardFactory(factory.django.DjangoModelFactory):
 	class Meta:
 		model = Board
 
-	title = 'Test board'
+	title = factory.Faker('name')
 	is_deleted = False
 
 
