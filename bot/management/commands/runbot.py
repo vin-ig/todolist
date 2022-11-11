@@ -3,11 +3,11 @@ import random
 import string
 import datetime
 
-import marshmallow
 from django.core.management.base import BaseCommand
 
 from bot.models import TgUser
 from bot.tg.client import TgClient
+from core.models import User
 from goals.models import Goal, GoalCategory
 from todolist.settings import env
 
@@ -28,7 +28,7 @@ class State(enum.Enum):
 
 class Command(BaseCommand):
 
-	def handle(self, *args, **options):
+	def handle(self, *args, **options) -> None:
 		offset = 0
 		tg_client = TgClient(env('TG_BOT_TOKEN'))
 		state = None
@@ -118,19 +118,19 @@ class Command(BaseCommand):
 				print(f'{item.message.message_from.first_name}: {item.message.text}')
 
 	@staticmethod
-	def _generate_code(length):
+	def _generate_code(length: int) -> str:
 		"""Генерирует код верификации"""
-		letters = string.ascii_uppercase
+		letters = string.digits
 		return ''.join(random.choice(letters) for i in range(length))
 
 	@staticmethod
-	def _get_goals(user):
+	def _get_goals(user: User) -> str:
 		"""Формирует список целей"""
 		goals = Goal.objects.filter(user=user, is_deleted=False)
 		return '\n'.join([f'#{i.id} - {i.title}' for i in goals])
 
 	@staticmethod
-	def _get_categories(user):
+	def _get_categories(user: User) -> dict:
 		"""Формирует список категорий"""
 		categories = GoalCategory.objects.filter(user=user, is_deleted=False)
 		cat_list = '\n'.join([f'  - _{i.title}_' for i in categories])
