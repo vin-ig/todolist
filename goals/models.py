@@ -5,6 +5,7 @@ from core.models import User
 
 
 class DatesModelMixin(models.Model):
+	"""Время создания и обновления объекта"""
 	class Meta:
 		abstract = True
 
@@ -19,6 +20,7 @@ class DatesModelMixin(models.Model):
 
 
 class Board(DatesModelMixin):
+	"""Доска"""
 	class Meta:
 		verbose_name = "Доска"
 		verbose_name_plural = "Доски"
@@ -28,6 +30,7 @@ class Board(DatesModelMixin):
 
 
 class BoardParticipant(DatesModelMixin):
+	"""Доска-пользователь m2m"""
 	class Meta:
 		unique_together = ("board", "user")
 		verbose_name = "Участник"
@@ -56,6 +59,7 @@ class BoardParticipant(DatesModelMixin):
 
 
 class GoalCategory(DatesModelMixin):
+	"""Категория"""
 	class Meta:
 		verbose_name = "Категория"
 		verbose_name_plural = "Категории"
@@ -69,6 +73,7 @@ class GoalCategory(DatesModelMixin):
 
 
 class Goal(DatesModelMixin):
+	"""Цель"""
 	class Meta:
 		verbose_name = "Цель"
 		verbose_name_plural = "Цели"
@@ -100,6 +105,7 @@ class Goal(DatesModelMixin):
 
 
 class GoalComment(DatesModelMixin):
+	"""Комментарий к цели"""
 	class Meta:
 		verbose_name = "Комментарий"
 		verbose_name_plural = "Комментарии"
