@@ -2,22 +2,23 @@ import pytest
 
 
 @pytest.mark.django_db
-def test_user_login(client, user):
-	password = user.password
-
-	user.set_password(password)
-	user.save()
+def test_user_create(client, django_user_model):
+	data = {
+		'username': 'Tester',
+		'password': 'Password8956',
+		'password_repeat': 'Password8956',
+	}
 
 	response = client.post(
-		path='/core/login',
-		data={
-			'username': user.username,
-			'password': password,
-		},
+		path='/core/signup',
+		data=data,
 		content_type='application/json'
 	)
 
+	user = django_user_model.objects.get(id=1)
+
 	expected_response = {
+		'id': user.id,
 		'username': user.username,
 		'password': user.password,
 		'first_name': user.first_name,
