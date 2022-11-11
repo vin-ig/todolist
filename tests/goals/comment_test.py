@@ -6,6 +6,7 @@ from tests.factories import GoalCommentFactory
 
 @pytest.mark.django_db
 def test_comment_create(client, get_credentials, goal, board_participant):
+	"""Создание комментария"""
 	data = {
 		'text': 'text',
 		'goal': goal.id,
@@ -25,6 +26,7 @@ def test_comment_create(client, get_credentials, goal, board_participant):
 
 @pytest.mark.django_db
 def test_comment_list(client, get_credentials, goal, board_participant):
+	"""Список комментариев"""
 	comments = GoalCommentFactory.create_batch(10, user=goal.user, goal=goal)
 	comments.sort(key=lambda x: x.id, reverse=True)
 
@@ -39,6 +41,7 @@ def test_comment_list(client, get_credentials, goal, board_participant):
 
 @pytest.mark.django_db
 def test_comment_retrieve(client, get_credentials, goal_comment, board_participant):
+	"""Просмотр комментария"""
 	response = client.get(
 		path=f'/goals/goal_comment/{goal_comment.id}',
 		HTTP_AUTHORIZATION=get_credentials
@@ -50,6 +53,7 @@ def test_comment_retrieve(client, get_credentials, goal_comment, board_participa
 
 @pytest.mark.django_db
 def test_comment_update(client, get_credentials, goal_comment, board_participant):
+	"""Обновление комментария"""
 	new_text = 'updated_text'
 
 	response = client.patch(
@@ -65,6 +69,7 @@ def test_comment_update(client, get_credentials, goal_comment, board_participant
 
 @pytest.mark.django_db
 def test_comment_delete(client, get_credentials, goal_comment, board_participant):
+	"""Удаление комментария"""
 	response = client.delete(
 		path=f'/goals/goal_comment/{goal_comment.id}',
 		HTTP_AUTHORIZATION=get_credentials,

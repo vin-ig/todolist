@@ -3,6 +3,7 @@ import pytest
 
 @pytest.mark.django_db
 def test_user_create(client, django_user_model):
+	"""Тест создания пользователя"""
 	data = {
 		'username': 'Tester',
 		'password': 'Password8956',

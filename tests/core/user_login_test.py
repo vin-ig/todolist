@@ -3,6 +3,7 @@ import pytest
 
 @pytest.mark.django_db
 def test_user_login(client, user):
+	"""Тест авторизации пользователя"""
 	password = user.password
 
 	user.set_password(password)

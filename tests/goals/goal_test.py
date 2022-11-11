@@ -6,6 +6,7 @@ from tests.factories import GoalFactory
 
 @pytest.mark.django_db
 def test_goal_create(client, get_credentials, user, goal_category):
+	"""Создание цели"""
 	data = {
 		'title': 'title',
 		'description': 'description',
@@ -34,6 +35,7 @@ def test_goal_create(client, get_credentials, user, goal_category):
 
 @pytest.mark.django_db
 def test_goal_list(client, get_credentials, board_participant, goal_category):
+	"""Список целей"""
 	goals = GoalFactory.create_batch(10, user=board_participant.user, category=goal_category)
 
 	response = client.get(
@@ -47,6 +49,7 @@ def test_goal_list(client, get_credentials, board_participant, goal_category):
 
 @pytest.mark.django_db
 def test_goal_retrieve(client, get_credentials, goal, user, board_participant):
+	"""Просмотр цели"""
 	response = client.get(
 		path=f'/goals/goal/{goal.id}',
 		HTTP_AUTHORIZATION=get_credentials
@@ -58,6 +61,7 @@ def test_goal_retrieve(client, get_credentials, goal, user, board_participant):
 
 @pytest.mark.django_db
 def test_goal_update(client, get_credentials, goal, board_participant):
+	"""Обновление цели"""
 	new_title = 'updated_title'
 
 	response = client.patch(
@@ -73,6 +77,7 @@ def test_goal_update(client, get_credentials, goal, board_participant):
 
 @pytest.mark.django_db
 def test_goal_delete(client, get_credentials, goal, board_participant):
+	"""Удаление цели"""
 	response = client.delete(
 		path=f'/goals/goal/{goal.id}',
 		HTTP_AUTHORIZATION=get_credentials,
