@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from rest_framework import status
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -8,14 +8,16 @@ from core.serializers import User, RetrieveUpdateSerializer, UpdatePasswordSeria
 
 
 class SignUpView(CreateAPIView):
+	"""Создание пользователя"""
 	queryset = User.objects.all()
 	serializer_class = SignUpSerializer
 
 
 class UserLoginView(CreateAPIView):
+	"""Авторизация пользователя"""
 	serializer_class = LoginSerializer
 
-	def post(self, request, *args, **kwargs):
+	def post(self, request, *args, **kwargs) -> Response:
 		serializer = self.get_serializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
 		login(request=request, user=serializer.save())
@@ -23,27 +25,29 @@ class UserLoginView(CreateAPIView):
 
 
 class RetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+	"""Просмотр, редактирование, удаление профиля"""
 	queryset = User.objects.all()
 	serializer_class = RetrieveUpdateSerializer
 	permission_classes = [IsAuthenticated]
 
-	def get_object(self):
+	def get_object(self) -> User:
 		return self.request.user
 
-	def delete(self, request, *args, **kwargs):
+	def delete(self, request, *args, **kwargs) -> Response:
 		logout(request)
 		return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UpdatePasswordView(UpdateAPIView):
+	"""Изменение пароля"""
 	serializer_class = UpdatePasswordSerializer
 	model = User
 	permission_classes = [IsAuthenticated]
 
-	def get_object(self):
+	def get_object(self) -> User:
 		return self.request.user
 
-	def update(self, request, *args, **kwargs):
+	def update(self, request, *args, **kwargs) -> Response:
 		self.object = self.get_object()
 		serializer = self.get_serializer(data=request.data)
 
