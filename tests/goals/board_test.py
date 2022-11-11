@@ -1,8 +1,7 @@
 import pytest
 
-from goals.models import Goal, Board
 from goals.serializers import BoardSerializer, BoardListSerializer
-from tests.factories import GoalFactory, BoardFactory, BoardParticipantFactory
+from tests.factories import BoardFactory, BoardParticipantFactory
 
 
 @pytest.mark.django_db
@@ -76,16 +75,3 @@ def test_board_delete(client, get_credentials, board, board_participant):
 
 	assert response.status_code == 204
 	assert response.data is None
-
-"""
-E = [
-	OrderedDict([('id', 1), ('created', '2022-11-11T18:14:44.159101Z'), ('updated', '2022-11-11T18:14:44.159101Z'), ('title', 'Jessica Curtis'), ('is_deleted', False)]), 
-	OrderedDict([('id', 2), ('created', '2022-11-11T18:14:44.169103Z'), ('updated', '2022-11-11T18:14:44.169103Z'), ('title', 'Noah Jones'), ('is_deleted', False)]),
-	OrderedDict([('id', 3), ('created', '2022-11-11T18:14:44.171101Z'), ('updated', '2022-11-11T18:14:44.171101Z'), ('title', 'George Hamilton'), ('is_deleted', False)])
-]
-A = [
-	OrderedDict([('id', 3), ('created', '2022-11-11T18:14:44.171101Z'), ('updated', '2022-11-11T18:14:44.171101Z'), ('title', 'George Hamilton'), ('is_deleted', False)]),
-	             ('participants', [OrderedDict([('id', 3), ('role', <Role.owner: 1>), ('user', 'Mark Newman'), ('created', '2022-11-11T18:14:44.174106Z'), ('updated', '2022-11-11T18:14:44.174106Z'), ('board', 3)])]),
-	OrderedDict([('id', 1), ('participants', [OrderedDict([('id', 1), ('role', <Role.owner: 1>), ('user', 'Mark Newman'), ('created', '2022-11-11T18:14:44.163104Z'), ('updated', '2022-11-11T18:14:44.163104Z'), ('board', 1)])]), ('created', '2022-11-11T18:14:44.159101Z'), ('updated', '2022-11-11T18:14:44.159101Z'), ('title', 'Jessica Curtis'), ('is_deleted', False)]), 
-	OrderedDict([('id', 2), ('participants', [OrderedDict([('id', 2), ('role', <Role.owner: 1>), ('user', 'Mark Newman'), ('created', '2022-11-11T18:14:44.173101Z'), ('updated', '2022-11-11T18:14:44.173101Z'), ('board', 2)])]), ('created', '2022-11-11T18:14:44.169103Z'), ('updated', '2022-11-11T18:14:44.169103Z'), ('title', 'Noah Jones'), ('is_deleted', False)])
-]"""

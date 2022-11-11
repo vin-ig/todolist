@@ -1,7 +1,7 @@
 import factory
 
 from core.models import User
-from goals.models import Goal, GoalCategory, Board, BoardParticipant
+from goals.models import Goal, GoalCategory, Board, BoardParticipant, GoalComment
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -56,3 +56,10 @@ class GoalFactory(factory.django.DjangoModelFactory):
 	due_date = '2022-11-14'
 
 
+class GoalCommentFactory(factory.django.DjangoModelFactory):
+	class Meta:
+		model = GoalComment
+
+	text = 'Test text'
+	goal = factory.SubFactory(GoalFactory)
+	user = factory.SubFactory(UserFactory)

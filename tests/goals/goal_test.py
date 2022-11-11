@@ -1,6 +1,5 @@
 import pytest
 
-from goals.models import Goal
 from goals.serializers import GoalSerializer
 from tests.factories import GoalFactory
 
@@ -74,8 +73,6 @@ def test_goal_update(client, get_credentials, goal, board_participant):
 
 @pytest.mark.django_db
 def test_goal_delete(client, get_credentials, goal, board_participant):
-	assert isinstance(goal, Goal)
-
 	response = client.delete(
 		path=f'/goals/goal/{goal.id}',
 		HTTP_AUTHORIZATION=get_credentials,
